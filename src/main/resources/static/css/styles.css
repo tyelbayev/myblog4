@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.post-preview {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+.tag {
+    background-color: #eee;
+    padding: 3px;
+    margin-right: 5px;
+    border-radius: 3px;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.title}"></title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body>
+<h1 th:text="${post.title}"></h1>
+<img th:src="${post.imgUrl}" alt="Post Image">
+<p th:each="paragraph : ${post.content}" th:text="${paragraph}"></p>
+<p>
+    <span th:each="tag : ${post.tags}" class="tag" th:text="${tag}"></span>
+</p>
+<button onclick="openEditForm()">Редактировать</button>
+<button th:onclick="'deletePost(' + ${post.id} + ')'" type="button">Удалить</button>
+<button th:onclick="'likePost(' + ${post.id} + ')'" type="button">
+    Лайк (<span th:text="${post.likeCount}"></span>)
+</button>
+
+
+<div id="edit-form" style="display: none;">
+    <h2>Редактировать пост</h2>
+    <form th:action="@{/post/edit}" method="post">
+        <input type="hidden" name="id" th:value="${post.id}">
+        <input type="text" name="title" th:value="${post.title}" required>
+        <input type="text" name="image" th:value="${post.imgUrl}">
+        <textarea name="content" th:text="${post.content}" required></textarea>
+        <input type="text" name="tags" th:value="${post.tags}">
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+
+<h3>Комментарии</h3>
+<form th:attr="onsubmit='addComment(event, ' + ${post.id} + ')'">
+    <input type="text" id="comment-text" placeholder="Добавить комментарий" required>
+    <button type="submit">Отправить</button>
+</form>
+<div id="comments-list">
+    <div th:each="comment : ${comments}" class="comment">
+        <p th:text="${comment.content}" ondblclick="editComment(this)"></p>
+        <button th:onclick="'deleteComment(' + ${comment.id} + ')'" type="button">Удалить</button>
+    </div>
+</div>
+</body>
+</html>
