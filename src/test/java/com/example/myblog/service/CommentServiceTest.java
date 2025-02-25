@@ -1,5 +1,6 @@
 package com.example.myblog.service;
 
+import com.example.myblog.MyblogApplicationTests;
 import com.example.myblog.model.Comment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @Sql(scripts = "/schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD) // Загружаем схему БД перед тестами
-public class CommentServiceTest {
+public class CommentServiceTest extends MyblogApplicationTests {
 
     @Autowired
     private CommentService commentService;
@@ -29,6 +30,10 @@ public class CommentServiceTest {
     @BeforeEach
     void setup() {
         jdbcTemplate.execute("DELETE FROM comment");
+        jdbcTemplate.execute("DELETE FROM post");
+
+        jdbcTemplate.update("INSERT INTO post (id, title, content, image_url, created_at, like_count, tags) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)", 1L, "Test Post", "Post Content", "post.png", LocalDateTime.now(), 0, "test");
 
         jdbcTemplate.update("INSERT INTO comment (post_id, content, created_at) VALUES (?, ?, ?)",
                 1L, "Test Comment", LocalDateTime.now());
